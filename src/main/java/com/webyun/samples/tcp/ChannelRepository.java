@@ -2,7 +2,6 @@ package com.webyun.samples.tcp;
 
 import io.netty.channel.Channel;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ChannelRepository {

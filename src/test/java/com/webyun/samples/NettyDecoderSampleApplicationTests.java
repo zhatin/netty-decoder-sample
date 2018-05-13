@@ -6,19 +6,13 @@ import static org.mockito.Mockito.when;
 import java.net.SocketAddress;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.webyun.samples.tcp.ChannelRepository;
-import com.webyun.samples.tcp.TCPServer;
 import com.webyun.samples.tcp.handler.TCPServerHandler;
 
 import io.netty.buffer.Unpooled;
