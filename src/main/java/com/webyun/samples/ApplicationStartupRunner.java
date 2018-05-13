@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +14,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
@@ -29,10 +30,12 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
 @Component
+@Configuration
+@Qualifier("applicationStartupRunner")
 @PropertySource(value = "classpath:/properties/${application.profiles.active:local}/application.properties")
 public class ApplicationStartupRunner  implements ApplicationRunner {
 
-	private static Logger logger = LogManager.getLogger(ApplicationStartupRunner.class);
+	private static final Logger logger = LoggerFactory.getLogger(ApplicationStartupRunner.class);
 	private ApplicationContext appContext;
 
 	public ApplicationStartupRunner(ApplicationContext  ctx) {
