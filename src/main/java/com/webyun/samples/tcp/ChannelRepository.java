@@ -3,9 +3,10 @@ package com.webyun.samples.tcp;
 import io.netty.channel.Channel;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ChannelRepository {
-	private HashMap<String, Channel> channelCache = new HashMap<String, Channel>();
+	private ConcurrentHashMap<String, Channel> channelCache = new ConcurrentHashMap<String, Channel>();
 
 	public ChannelRepository put(String key, Channel value) {
 		channelCache.put(key, value);
