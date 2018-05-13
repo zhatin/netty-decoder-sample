@@ -1,16 +1,10 @@
 package com.webyun.samples.tcp.handler;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
-import io.netty.handler.codec.Delimiters;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
@@ -35,6 +29,8 @@ public class TCPChannelInitializer extends ChannelInitializer<SocketChannel> {
 	protected void initChannel(SocketChannel socketChannel) throws Exception {
 		ChannelPipeline pipeline = socketChannel.pipeline();
 
+		pipeline.addLast("Multiprotocol Decoder", new MultiProtocolFrameDecoder(new byte[] { (byte) 0xF0 }, new byte[] { (byte) 0xFD }));
+		
 		pipeline.addLast(new IdleStateHandler(0, 0, ALL_IDLE_SECONDS, TimeUnit.SECONDS) {
 			@Override
 			protected void channelIdle(ChannelHandlerContext ctx, IdleStateEvent evt) throws Exception {

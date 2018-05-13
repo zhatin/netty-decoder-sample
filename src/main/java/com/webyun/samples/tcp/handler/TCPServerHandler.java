@@ -1,5 +1,7 @@
 package com.webyun.samples.tcp.handler;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -42,6 +44,11 @@ public class TCPServerHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
+		ByteBuf buf = (ByteBuf) msg;
+		byte[] hexByte = new byte[buf.readableBytes()];
+
+		buf.readBytes(hexByte);
+		logger.info("Read Data: " + Hex.encodeHexString(hexByte).toUpperCase());
 	}
 
 	@Override

@@ -22,12 +22,12 @@ public class TCPServer {
 
 	private Channel serverChannel;
 
-	public void start() throws Exception {
+	public void start() throws InterruptedException {
 		serverChannel = serverBootstrap.bind(tcpPort).sync().channel().closeFuture().sync().channel();
 	}
 
 	@PreDestroy
-	public void stop() throws Exception {
+	public void stop() {
 		if (serverChannel != null) {
 			serverChannel.close();
 			serverChannel.parent().close();
