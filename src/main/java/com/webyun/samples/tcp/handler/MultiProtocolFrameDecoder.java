@@ -31,12 +31,17 @@ public class MultiProtocolFrameDecoder extends CustomDelimiterBasedFrameDecoder 
 		}
 	}
 
+	enum DecoderState {
+		UNKNOWN, MATCHED, UNMATCHED
+	};
+
 	private static final Logger logger = LoggerFactory.getLogger(MultiProtocolFrameDecoder.class);
 
-	private boolean hasMatached = false;
+	private DecoderState decoderState;
 
 	public MultiProtocolFrameDecoder(byte[] protocol, byte[] delimiters) {
 		this(Integer.MAX_VALUE, false, new ByteBuf[] { Unpooled.wrappedBuffer(delimiters) });
+		this.decoderState = DecoderState.UNKNOWN;
 	}
 
 	public MultiProtocolFrameDecoder(int maxFrameLength, boolean stripDelimiter, ByteBuf[] delimiters) {
@@ -46,7 +51,11 @@ public class MultiProtocolFrameDecoder extends CustomDelimiterBasedFrameDecoder 
 	@Override
 	protected Object decode(ChannelHandlerContext ctx, ByteBuf buffer) throws Exception {
 
-		if (!hasMatached) {
+		if (this.decoderState == DecoderState.UNMATCHED) {
+			return null;
+		}
+
+		if (this.decoderState == DecoderState.UNKNOWN) {
 			for (ProtocolType pt : ProtocolType.values()) {
 				ByteBuf buf = pt.tag();
 				int idx = indexOf(buffer, buf);
@@ -56,11 +65,12 @@ public class MultiProtocolFrameDecoder extends CustomDelimiterBasedFrameDecoder 
 						logger.info(" Protocol Matched, Tag: " + Hex.encodeHexString(buf.slice().array()).toUpperCase()
 								+ ", Delimiter: " + Hex.encodeHexString(fd.slice().array()).toUpperCase());
 						setDelimiters(new ByteBuf[] { fd });
-						hasMatached = true;
+						this.decoderState = DecoderState.MATCHED;
 					}
 				}
 			}
-			if (!hasMatached) {
+			if (this.decoderState == DecoderState.UNKNOWN) {
+				this.decoderState = DecoderState.UNMATCHED;
 				ctx.close();
 				logger.info("Close connection when protocol NOT supported.");
 			}
