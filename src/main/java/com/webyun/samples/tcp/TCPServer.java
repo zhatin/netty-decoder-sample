@@ -32,7 +32,7 @@ import java.util.Set;
 public class TCPServer {
 
 	private static final Logger logger = LogManager.getLogger(TCPServer.class);
-	
+
 	private Channel serverChannel;
 
 	@Value("${tcp.port}")
@@ -73,7 +73,7 @@ public class TCPServer {
 	@Bean(name = "tcpChannelOptions")
 	public Map<ChannelOption<?>, Object> tcpChannelOptions() {
 		Map<ChannelOption<?>, Object> options = new HashMap<ChannelOption<?>, Object>();
-		//options.put(ChannelOption.SO_KEEPALIVE, keepAlive);
+		// options.put(ChannelOption.SO_KEEPALIVE, keepAlive);
 		options.put(ChannelOption.SO_BACKLOG, backlog);
 		return options;
 	}
@@ -106,7 +106,8 @@ public class TCPServer {
 	public void stop() {
 		if (serverChannel != null) {
 			serverChannel.close();
-			serverChannel.parent().close();
+			if (serverChannel.parent() != null)
+				serverChannel.parent().close();
 		}
 		logger.debug("TCPServer stopped.");
 	}
