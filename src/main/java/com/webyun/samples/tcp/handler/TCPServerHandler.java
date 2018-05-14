@@ -23,7 +23,7 @@ public class TCPServerHandler extends ChannelInboundHandlerAdapter {
 	@Autowired
 	private ChannelRepository channelRepository;
 
-	private static Logger logger = LogManager.getLogger(TCPServerHandler.class);
+	private static final Logger logger = LogManager.getLogger(TCPServerHandler.class);
 	
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
