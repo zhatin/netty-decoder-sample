@@ -7,11 +7,10 @@ import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,15 +31,13 @@ import io.netty.handler.logging.LoggingHandler;
 @Component
 @Configuration
 @PropertySource(value = "classpath:/properties/${application.profiles.active:local}/application.properties")
-public class ApplicationStartupRunner  implements ApplicationRunner {
+public class ApplicationStartupRunner {
 
 	private static final Logger logger = LogManager.getLogger(ApplicationStartupRunner.class);
-	private ApplicationContext appContext;
-
-	public ApplicationStartupRunner(ApplicationContext  ctx) {
-		this.appContext = ctx;
-	}
-
+	
+	@Autowired
+    private ApplicationContext appContext;
+	
 	@Value("${tcp.port}")
 	private int tcpPort;
 
@@ -103,14 +100,14 @@ public class ApplicationStartupRunner  implements ApplicationRunner {
 	public ChannelRepository channelRepository() {
 		return new ChannelRepository();
 	}
+	
+	public void run() throws BeansException, InterruptedException {
 
-	@Override
-	public void run(ApplicationArguments args) throws Exception {
+		logger.info("ApplicationStartupRunner running.");
 
 		TCPServer tcpServer = appContext.getBean(TCPServer.class);
 		tcpServer.start();
 
-		logger.info("ApplicationStartupRunner running.");
 	}
 
 }
