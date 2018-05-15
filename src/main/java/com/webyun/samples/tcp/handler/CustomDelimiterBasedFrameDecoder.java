@@ -9,7 +9,7 @@ import io.netty.handler.codec.TooLongFrameException;
 
 public class CustomDelimiterBasedFrameDecoder extends ByteToMessageDecoder {
 
-	private ByteBuf[] delimiters;
+	private volatile ByteBuf[] delimiters;
 	private int maxFrameLength;
 	private boolean stripDelimiter;
 	private boolean failFast;

@@ -21,7 +21,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
-public class NettyDecoderSampleApplicationTests {
+public class NettyDecoderSampleApplicationJUnitTests {
 
 	private TCPServerHandler tcpServerHandler;
 

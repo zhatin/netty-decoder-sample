@@ -25,6 +25,8 @@ public class TCPServerHandler extends ChannelInboundHandlerAdapter {
 
 	private static final Logger logger = LogManager.getLogger(TCPServerHandler.class);
 	
+	private long packageCount = 0;
+	
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		Assert.notNull(this.channelRepository,
@@ -47,7 +49,10 @@ public class TCPServerHandler extends ChannelInboundHandlerAdapter {
 		byte[] hexByte = new byte[buf.readableBytes()];
 
 		buf.readBytes(hexByte);
-		logger.info("Read Data: " + Hex.encodeHexString(hexByte).toUpperCase());
+		packageCount++;
+		logger.debug("Read Data: " + Hex.encodeHexString(hexByte).toUpperCase());
+		
+		buf.release();
 	}
 
 	@Override
@@ -65,6 +70,7 @@ public class TCPServerHandler extends ChannelInboundHandlerAdapter {
 		String channelKey = ctx.channel().remoteAddress().toString();
 		this.channelRepository.remove(channelKey);
 
+		logger.info("Channel: " + channelKey + " received " + packageCount + " packages.");
 		logger.debug("Binded Channel Count is " + this.channelRepository.size());
 	}
 

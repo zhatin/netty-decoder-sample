@@ -63,7 +63,7 @@ public class MultiProtocolFrameDecoder extends CustomDelimiterBasedFrameDecoder 
 				if (buf.capacity() <= buffer.readableBytes()) {
 					if (0 == idx) {
 						ByteBuf fd = pt.delimiter();
-						logger.info(" Protocol Matched, Tag: " + Hex.encodeHexString(buf.slice().array()).toUpperCase()
+						logger.info(ctx.channel().remoteAddress().toString() + " Protocol Matched, Tag: " + Hex.encodeHexString(buf.slice().array()).toUpperCase()
 								+ ", Delimiter: " + Hex.encodeHexString(fd.slice().array()).toUpperCase());
 						setDelimiters(new ByteBuf[] { fd });
 						this.decoderState = DecoderState.MATCHED;
@@ -73,7 +73,7 @@ public class MultiProtocolFrameDecoder extends CustomDelimiterBasedFrameDecoder 
 			if (this.decoderState == DecoderState.UNKNOWN) {
 				this.decoderState = DecoderState.UNMATCHED;
 				ctx.close();
-				logger.info("Close connection when protocol NOT supported.");
+				logger.info(ctx.channel().remoteAddress().toString() + " Close connection when protocol NOT supported.");
 				return null;
 			}
 		}

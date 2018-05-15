@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Qualifier("tcpChannelInitializer")
 public class TCPChannelInitializer extends ChannelInitializer<SocketChannel> {
 
-	private static final int ALL_IDLE_SECONDS = 60;
+	private static final int ALL_IDLE_SECONDS = 5;
 
 	@Autowired
 	@Qualifier("tcpServerHandler")
